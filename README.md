@@ -1,2 +1,2 @@
 # OTEL
-Various to test OTEL with
+Various samples of code to do various bits of testing with OTel.   Nothing exciting.
