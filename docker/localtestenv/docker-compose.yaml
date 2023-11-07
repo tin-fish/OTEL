@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  otelcollector:
+    environment:
+      - SPLUNK_ACCESS_TOKEN
+      - SPLUNK_REALM
+    image: quay.io/signalfx/splunk-otel-collector:0.87.0
+    hostname: tinfish-docker-otel-agent
+    networks:
+      - tinfishnw
+    container_name: splunk-otel-agent
+    command: ["--config=/etc/otel-collector-config.yaml", "--set=service.telemetry.logs.level=debug"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "19291:19291"
+      - "8888:8888"
+      - "4317:4317"
+    depends_on:
+      node_exporter:
+        condition: service_started
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.6.1
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    networks:
+      - tinfishnw
+    ports:
+      - "9100:9100"
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+  otlpumper:
+    environment:
+      - OTLP_ENDPOINT=otelcollector:4317
+    image: tinfish/tinman_otlpumper:latest
+    container_name: otlpumper
+    volumes:
+      - ./narrative.yaml:/app/narrative.yaml
+    networks:
+      - tinfishnw
+networks:
+  tinfishnw:
