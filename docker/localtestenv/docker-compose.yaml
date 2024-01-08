@@ -4,6 +4,7 @@ services:
     environment:
       - SPLUNK_ACCESS_TOKEN
       - SPLUNK_REALM
+      - OTEL_RESOURCE_ATTRIBUTES=tinfishtest0=yes,tinfishtest1=no
     image: quay.io/signalfx/splunk-otel-collector:0.87.0
     hostname: tinfish-docker-otel-agent
     networks:

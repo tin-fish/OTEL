@@ -1,0 +1,15 @@
+dist:
+  name: otelcol-custom
+  description: Local OpenTelemetry Collector binary
+  output_path: /tmp/dist
+exporters:
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.91.0
+    path: "/tmp/signalfxexporter"
+
+receivers:
+  - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.91.0
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusreceiver v0.91.0
+
+processors:
+  - gomod: go.opentelemetry.io/collector/processor/batchprocessor v0.91.0
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourcedetectionprocessor v0.91.0
